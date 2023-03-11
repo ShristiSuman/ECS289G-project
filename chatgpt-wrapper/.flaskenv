@@ -1,0 +1,2 @@
+FLASK_APP=test_response.py
+FLASK_ENV=development
