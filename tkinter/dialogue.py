@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-# from PIL import ImageTk, Image
 from chatgpt_wrapper import ChatGPT
 
 def process_text(input_text):
@@ -27,13 +26,13 @@ def process_input():
         input_prompt+=character_string
     if genre_text:
         genre_string = 'based on '+ genre_text + ' genre'
-        input_prompt+=genre_text
+        input_prompt+=genre_string
     if location_text:
         location_string = 'located in '+ location_text
         input_prompt+=location_string
     if social_outcome_text:
-        social_oucome_string = 'which leads to an outcome where '+social_outcome_text
-        input_prompt+=social_outcome_text
+        social_outcome_string = 'which leads to an outcome where '+social_outcome_text
+        input_prompt+=social_outcome_string
     # input_prompt = 'Write an in-dialogue conversation between {} on {} genre which will be located in {} and lead to outcome where {}'.format(character_text,genre_text,location_text,social_outcome_text)
     output_text = process_text(input_prompt)
     output_box.configure(state='normal')
