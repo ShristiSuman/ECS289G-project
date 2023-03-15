@@ -1,7 +1,7 @@
 import os
 import openai
 
-openai.api_key = "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"
+openai.api_key = "my_key"
 
 def generate_visual_character(input_prompt):
     response = openai.Image.create(
