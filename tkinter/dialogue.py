@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import *
+
 from chatgpt_wrapper import ChatGPT
 
 def process_text(input_text):
@@ -22,7 +24,7 @@ def process_input():
     social_outcome_text = social_outcome_box.get('1.0', 'end-1c')
     input_prompt = 'Write an in-dialogue conversation'
     if character_text:
-        character_string = 'between '+ character_text
+        character_string = 'explicitly between '+ character_text
         input_prompt+=character_string
     if genre_text:
         genre_string = 'based on '+ genre_text + ' genre'
@@ -33,8 +35,17 @@ def process_input():
     if social_outcome_text:
         social_outcome_string = 'which leads to an outcome where '+social_outcome_text
         input_prompt+=social_outcome_string
-    # input_prompt = 'Write an in-dialogue conversation between {} on {} genre which will be located in {} and lead to outcome where {}'.format(character_text,genre_text,location_text,social_outcome_text)
-    output_text = process_text(input_prompt)
+    
+    method = sel()
+    if method == '1':
+        with open('story.txt', 'r') as file:
+            data = file.read().replace('\n', '')
+        print("Read the story")
+        temp_prompt = data + ' Use this above story and then '+ input_prompt
+    else:
+        temp_prompt = input_prompt
+
+    output_text = process_text(temp_prompt)
     output_box.configure(state='normal')
     output_box.delete('1.0', 'end')
     output_box.insert('end', output_text)
@@ -64,6 +75,25 @@ social_outcome_label = ttk.Label(root, text='Social outcome', anchor='center')
 social_outcome_label.pack(pady=5, fill='x')
 social_outcome_box = tk.Text(root, height=1, width=50)
 social_outcome_box.pack(padx=0,pady=10)
+
+# Create the radio button
+option_label = ttk.Label(root, text='Story Generation Method', anchor='center')
+option_label.pack(pady=5, fill='x')
+
+def sel():
+   selection = "You selected the option " + str(var.get())
+   label.config(text = selection)
+   value = str(var.get())
+   return value
+
+var = IntVar()
+R1 = Radiobutton(root, text="Take previous generated story into consideration", variable=var, value=1, command=sel)
+R1.pack(anchor = 'center')
+
+R2 = Radiobutton(root, text="Build completely new story", variable=var, value=2, command=sel)
+R2.pack(anchor = 'center')
+label = Label(root)
+label.pack()
 
 # Create the process button
 process_button = ttk.Button(root, text='Process', command=process_input)
