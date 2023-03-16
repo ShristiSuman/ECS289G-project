@@ -4,11 +4,12 @@ from PIL import ImageTk, Image
 from chatgpt_wrapper import ChatGPT
 import requests
 import shutil
+import os
 import dalle
 
 
+
 def process_text(input_text):
-    # Replace this with your own function that processes the input
     print("Inside process_text")
     bot = ChatGPT()
     success, response, message = bot.ask(input_text)
@@ -17,7 +18,6 @@ def process_text(input_text):
         output_text = response
     else:
         output_text = message
-    # output_text = "Output:  " + input_text #+" where the genre is "+ genre+ "with"+ no_char+" characters whose names are "
     return output_text
 
 def process_input():
@@ -29,6 +29,12 @@ def process_input():
     # input_text = input_box.get('1.0', 'end-1c')
     # Process the input and display the output
     output_text = process_text(input_text)
+
+    #write the story to a text file for later usage
+    generated_story_text_file = open("./dynamically_gen_files/story.txt", "w")
+    generated_story_text_file.write(output_text)
+    generated_story_text_file.close()
+
     output_box.configure(state='normal')
     output_box.delete('1.0', 'end')
     output_box.insert('end', output_text)
@@ -41,7 +47,7 @@ def generate_image():
 
     url = dalle.generate_visual_character(input_text)
     res = requests.get(url, stream = True)
-    file_name = "char.png"
+    file_name = "./dynamically_gen_files/char.png"
     with open(file_name,'wb') as f:
         shutil.copyfileobj(res.raw, f)
 
@@ -49,6 +55,12 @@ def generate_image():
     canvas_img.img_tk = img_tk
     canvas_img.create_image((10,10),anchor='nw',image=img_tk)
     
+
+
+#cleanup
+dir = './dynamically_gen_files'
+for f in os.listdir(dir):
+    os.remove(os.path.join(dir, f))
 
 # Create the GUI
 root = tk.Tk()
