@@ -14,6 +14,11 @@ def process_text(input_text):
         output_text = response
     else:
         output_text = message
+    
+    generated_indialogue_text_file = open("./dynamically_gen_files/indialogue.txt", "w")
+    generated_indialogue_text_file.write(output_text)
+    generated_indialogue_text_file.close()
+
     return output_text
 
 def process_input():
@@ -38,7 +43,7 @@ def process_input():
     
     method = sel()
     if method == '1':
-        with open('story.txt', 'r') as file:
+        with open('./dynamically_gen_files/story.txt', 'r') as file:
             data = file.read().replace('\n', '')
         print("Read the story")
         temp_prompt = data + ' Use this above story and then '+ input_prompt
@@ -117,7 +122,7 @@ def open_textbox():
     
     def show_output():
         edit_input_text = get_edit_text()
-        with open('dynamically_gen_files/indialogue.txt', 'r') as file:
+        with open('./dynamically_gen_files/indialogue.txt', 'r') as file:
             data = file.read().replace('\n', '')
         # print("Read the in-dialogue story")
         edited_prompt = data + ' Build an in-dialogue conversation based on above conversation with new edits as '+ edit_input_text

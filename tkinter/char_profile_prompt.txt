@@ -1,0 +1,7 @@
+Generate character game profiles for the above story. Write it strictly in the following format:
+Name:
+Age:
+Traits:
+Backstory:
+
+Don't say sure or anything from your side. Just generate what I have asked for.  Put 10 "#" symbols before and after each character profile that is being generated like this "##########". Again, please do not say sure.

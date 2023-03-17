@@ -5,13 +5,13 @@ from chatgpt_wrapper import ChatGPT
 import requests
 import shutil
 import os
+import re
 import dalle
 
-
+bot = ChatGPT()
 
 def process_text(input_text):
     print("Inside process_text")
-    bot = ChatGPT()
     success, response, message = bot.ask(input_text)
     print("Got resp")
     if success:
@@ -40,27 +40,112 @@ def process_input():
     output_box.insert('end', output_text)
     output_box.configure(state='disabled')
 
-def generate_image():
-    input_text = char_viz_box.get('1.0', 'end-1c')
-    canvas_img = tk.Canvas(frame, width=256, height=256)
-    canvas_img.pack()
+def generate_character_profile():
 
-    url = dalle.generate_visual_character(input_text)
-    res = requests.get(url, stream = True)
-    file_name = "./dynamically_gen_files/char.png"
-    with open(file_name,'wb') as f:
-        shutil.copyfileobj(res.raw, f)
-
-    img_tk = ImageTk.PhotoImage(Image.open(file_name))
-    canvas_img.img_tk = img_tk
-    canvas_img.create_image((10,10),anchor='nw',image=img_tk)
+    generated_story_file = open("./dynamically_gen_files/story.txt", "r")
+    generated_story = generated_story_file.read()
+    generated_story_file.close()
+    char_profile_prompt_file = open("./char_profile_prompt.txt")
+    char_profile_prompt = char_profile_prompt_file.read()
+    char_profile_prompt_file.close()
+    fin_char_profile_prompt = generated_story + "\n" + char_profile_prompt
     
+    success, response, message = bot.ask(fin_char_profile_prompt)
+
+    if success:
+        output_text = response
+    else:
+        output_text = message
+
+    # Split the contents into separate character profiles
+    print(output_text)
+    profiles = output_text.split('##########\n')
+    print(profiles)
+
+    char_file_names = []
+
+    # Process each character profile
+    for i in range(1, len(profiles)):
+        profile = profiles[i]
+
+        name_regex = r"Name: (\w+)"
+        name_match = re.search(name_regex, profile)
+        if name_match:
+            name = name_match.group(1)
+        print("\n" + name)
+
+        # Create a new file with the name of the character
+        char_file_name = './dynamically_gen_files/char_' + name + '.txt'
+        char_file_names.append(char_file_name)
+        with open(char_file_name, 'w') as outfile:
+            # Write the character's profile to the file
+            outfile.write(profile)
+            print("File created")
+    
+    # iterate over the file paths and create a text box for each file
+    # for i, file_path in enumerate(char_file_names):
+        
+    #     with open(file_path, "r") as f:
+    #         contents = f.read()
+
+    #         canvas_img = tk.Canvas(frame, width=256, height=256)
+    #         canvas_img.pack()
+
+    #         url = dalle.generate_visual_character(contents + "\nGenerate a character which suits the above description")
+    #         res = requests.get(url, stream = True)
+    #         new_file_path = file_path[:-3] + "png"
+    #         with open(new_file_path,'wb') as f:
+    #             shutil.copyfileobj(res.raw, f)
+            
+    #         char_text_box = tk.Text(frame, height=10, width=50, state='disabled')
+    #         char_text_box.pack(pady=10)
+    #         char_text_box.configure(state='normal')
+    #         char_text_box.delete('1.0', 'end')
+    #         char_text_box.insert('end', contents)
+    #         char_text_box.configure(state='disabled')
+
+    #         img_tk = ImageTk.PhotoImage(Image.open(new_file_path))
+    #         canvas_img.img_tk = img_tk
+    #         canvas_img.create_image((10,10),anchor='nw',image=img_tk)
+
+    # Create a frame to contain the text box and canvas
+    bb_frame = tk.Frame(frame)
+    bb_frame.pack()
+
+    # iterate over the file paths and create a text box for each file
+    for i, file_path in enumerate(char_file_names):
+        
+        with open(file_path, "r") as f:
+            contents = f.read()
+
+            canvas_img = tk.Canvas(bb_frame, width=256, height=256)
+            canvas_img.grid(row=i, column=1, padx=10, pady=10)
+
+            url = dalle.generate_visual_character(contents + "\nGenerate a character which suits the above description")
+            res = requests.get(url, stream = True)
+            new_file_path = file_path[:-3] + "png"
+            with open(new_file_path,'wb') as f:
+                shutil.copyfileobj(res.raw, f)
+            
+            char_text_box = tk.Text(bb_frame, height=10, width=50, state='disabled')
+            char_text_box.grid(row=i, column=0, padx=10, pady=10)
+            char_text_box.configure(state='normal')
+            char_text_box.delete('1.0', 'end')
+            char_text_box.insert('end', contents)
+            char_text_box.configure(state='disabled')
+
+            img_tk = ImageTk.PhotoImage(Image.open(new_file_path))
+            canvas_img.img_tk = img_tk
+            canvas_img.create_image((10,10),anchor='nw',image=img_tk)
 
 
-#cleanup
-dir = './dynamically_gen_files'
-for f in os.listdir(dir):
-    os.remove(os.path.join(dir, f))
+def cleanup():
+    dir = './dynamically_gen_files'
+    for f in os.listdir(dir):
+        os.remove(os.path.join(dir, f))
+
+#cleanup of the dynamically gen files
+cleanup()
 
 # Create the GUI
 root = tk.Tk()
@@ -112,14 +197,8 @@ output_label.pack(pady=10, fill='x')
 output_box = tk.Text(frame, height=10, width=50, state='disabled')
 output_box.pack(pady=10)
 
-#Create input prompt for character generation
-char_viz_label = ttk.Label(frame, text='Describe the character', anchor='center')
-char_viz_label.pack(pady=5, fill='x')
-char_viz_box = tk.Text(frame, height=10, width=50)
-char_viz_box.pack(padx=0,pady=10)
-
 # Create the generate button
-gen_button = ttk.Button(frame, text='Generate', command=generate_image)
+gen_button = ttk.Button(frame, text='Generate character profile', command=generate_character_profile)
 gen_button.pack(pady=10)
 
 # Start the GUI
