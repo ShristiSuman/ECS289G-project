@@ -55,6 +55,7 @@ def process_input():
 # Create the GUI
 root = tk.Tk()
 root.title('ECS 289G - Short Story Long - Project')
+
 # Create the input text box
 character_label = ttk.Label(root, text='Characters Involved', anchor='center')
 character_label.pack(pady=5, fill='x')
@@ -105,6 +106,41 @@ output_label.pack(pady=10, fill='x')
 output_box = tk.Text(root, height=10, width=50, state='disabled')
 output_box.pack(pady=10)
 
+# Open the box for writing edited prompt
+def open_textbox():
+    textbox = tk.Text(root, height=10, width=50)
+    textbox.pack()
+    
+    def get_edit_text():
+        edit_text = textbox.get("1.0", "end-1c")
+        return edit_text
+    
+    def show_output():
+        edit_input_text = get_edit_text()
+        with open('dynamically_gen_files/indialogue.txt', 'r') as file:
+            data = file.read().replace('\n', '')
+        # print("Read the in-dialogue story")
+        edited_prompt = data + ' Build an in-dialogue conversation based on above conversation with new edits as '+ edit_input_text
+        edit_output_text = process_text(edited_prompt)
+
+        # Creating and displaying the output based on new prompt
+        edit_output_label = tk.Label(root, text='Edited Output:', anchor='center')
+        edit_output_label.pack(pady=10, fill='x')
+        edit_output_box = tk.Text(root, height=10, width=50, state='disabled')
+        edit_output_box.pack(pady=10)
+
+        edit_output_box.configure(state='normal')
+        edit_output_box.delete('1.0', 'end')
+        edit_output_box.insert('end', edit_output_text)
+        edit_output_box.configure(state='disabled')
+
+    # Creating Submit button
+    ok_button = ttk.Button(root, text="OK", command= show_output)
+    ok_button.pack()
+
+# Create the edit button
+edit_button = ttk.Button(root, text="Edit", command=open_textbox)
+edit_button.pack()
 
 # Start the GUI
 root.mainloop()
