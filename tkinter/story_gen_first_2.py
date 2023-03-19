@@ -11,11 +11,6 @@ import dalle
 
 bot = ChatGPT()
 
-def cleanup():
-    dir = './dynamically_gen_files'
-    for f in os.listdir(dir):
-        os.remove(os.path.join(dir, f))
-
 def process_text(input_text):
     # Replace this with your own function that processes the input
     print("Inside process_text")
@@ -171,8 +166,8 @@ def generate_character_profile():
 
     char_canvas.configure(yscrollcommand=scrollbar.set)
 
-    sub_frame1 = customtkinter.CTkFrame(char_canvas, height=200)
-    char_canvas.create_window((0, 0), window=sub_frame1, anchor='nw')
+    sub_frame = customtkinter.CTkFrame(char_canvas, height=200)
+    char_canvas.create_window((0, 0), window=sub_frame, anchor='nw')
 
     char_canvas.configure(scrollregion=char_canvas.bbox('all'))
     char_canvas.bind('<Configure>', lambda e: char_canvas.configure(scrollregion=char_canvas.bbox('all')))
@@ -218,7 +213,7 @@ def generate_character_profile():
             print("File created")
 
     # Create a frame to contain the text box and canvas
-    bb_frame = customtkinter.CTkFrame(sub_frame1)
+    bb_frame = customtkinter.CTkFrame(sub_frame)
     bb_frame.pack()
 
     # iterate over the file paths and create a text box for each file
@@ -248,129 +243,10 @@ def generate_character_profile():
             canvas_img.create_image((10,10),anchor='nw',image=img_tk)
 
 
-def generate_indialogue_conversation():
-
-    def get_indialogue(input_text):
-        # Replace this with your own function that processes the input
-        print("Inside get_indialogue")
-        bot = ChatGPT()
-        success, response, message = bot.ask(input_text)
-        print("Got resp")
-        if success:
-            output_text = response
-        else:
-            output_text = message
-        
-        generated_indialogue_text_file = open("./dynamically_gen_files/indialogue.txt", "w")
-        generated_indialogue_text_file.write(output_text)
-        generated_indialogue_text_file.close()
-
-        return output_text
-
-    def sel():
-        selection = "You selected the option " + str(var.get())
-        label.configure(text = selection)
-        value = str(var.get())
-        return value
-
-    def open_indialogue_textbox():
-        textbox = customtkinter.CTkTextbox(sub_frame2, height=10, width=50)
-        textbox.pack()
-        
-        def get_edit_text():
-            edit_text = textbox.get("1.0", "end-1c")
-            return edit_text
-        
-        def show_output():
-            edit_input_text = get_edit_text()
-            with open('./dynamically_gen_files/indialogue.txt', 'r') as file:
-                data = file.read().replace('\n', '')
-            # print("Read the in-dialogue story")
-            edited_prompt = data + ' Build an in-dialogue conversation based on above conversation with new edits as '+ edit_input_text
-            edit_output_text = get_indialogue(edited_prompt)
-
-            # Creating and displaying the output based on new prompt
-            edit_output_label = customtkinter.CTkLabel(sub_frame2, text='Edited Output:', anchor='center')
-            edit_output_label.pack(pady=10, fill='x')
-            edit_output_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=50, state='disabled')
-            edit_output_box.pack(pady=10)
-
-            edit_output_box.configure(state='normal')
-            edit_output_box.delete('1.0', 'end')
-            edit_output_box.insert('end', edit_output_text)
-            edit_output_box.configure(state='disabled')
-
-        # Creating Submit button
-        ok_button = customtkinter.CTkButton(sub_frame2, text="OK", command= show_output)
-        ok_button.pack()
-    
-    # Create the GUI
-    dial_win = customtkinter.CTkToplevel(frame)
-    w, h = dial_win.winfo_screenwidth(), dial_win.winfo_screenheight()
-    dial_win.geometry("%dx%d+0+0" % (w, h))
-
-    dial_canvas = tk.Canvas(dial_win)
-    dial_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-
-    scrollbar = customtkinter.CTkScrollbar(dial_win, command=dial_canvas.yview)
-    scrollbar.pack(side=tk.LEFT, fill=tk.Y)
-
-    dial_canvas.configure(yscrollcommand=scrollbar.set)
-
-    sub_frame2 = customtkinter.CTkFrame(dial_canvas, height=200)
-    dial_canvas.create_window((0, 0), window=sub_frame2, anchor='nw')
-
-    dial_canvas.configure(scrollregion=dial_canvas.bbox('all'))
-    dial_canvas.bind('<Configure>', lambda e: dial_canvas.configure(scrollregion=dial_canvas.bbox('all')))
-
-    # Create the input text box
-    character_label = customtkinter.CTkLabel(sub_frame2, text='Characters Involved', anchor='center')
-    character_label.pack(pady=5, fill='x')
-    character_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=50)
-    character_box.pack(padx=0,pady=10)
-
-    genre_label = customtkinter.CTkLabel(sub_frame2, text='Genre', anchor='center')
-    genre_label.pack(pady=5, fill='x')
-    genre_box = customtkinter.CTkTextbox(sub_frame2, height=1, width=50)
-    genre_box.pack(padx=0,pady=10)
-
-    location_label = customtkinter.CTkLabel(sub_frame2, text='Location', anchor='center')
-    location_label.pack(pady=5, fill='x')
-    location_box = customtkinter.CTkTextbox(sub_frame2, height=1, width=50)
-    location_box.pack(padx=0,pady=10)
-
-    social_outcome_label = customtkinter.CTkLabel(sub_frame2, text='Social outcome', anchor='center')
-    social_outcome_label.pack(pady=5, fill='x')
-    social_outcome_box = customtkinter.CTkTextbox(sub_frame2, height=1, width=50)
-    social_outcome_box.pack(padx=0,pady=10)
-
-    # Create the radio button
-    option_label = customtkinter.CTkLabel(sub_frame2, text='Story Generation Method', anchor='center')
-    option_label.pack(pady=5, fill='x')
-
-    var = tk.IntVar()
-    R1 = customtkinter.CTkRadioButton(sub_frame2, text="Take previous generated story into consideration", variable=var, value=1, command=sel)
-    R1.pack(anchor = 'center')
-
-    R2 = customtkinter.CTkRadioButton(sub_frame2, text="Build completely new story", variable=var, value=2, command=sel)
-    R2.pack(anchor = 'center')
-    label = customtkinter.CTkLabel(sub_frame2)
-    label.pack()
-
-    # Create the process button
-    process_button = customtkinter.CTkButton(sub_frame2, text='Process', command=get_indialogue)
-    process_button.pack(pady=10)
-
-    # Create the output label and text box
-    output_label = customtkinter.CTkLabel(sub_frame2, text='Output', anchor='center')
-    output_label.pack(pady=10, fill='x')
-    output_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=50, state='disabled')
-    output_box.pack(pady=10)
-
-    # Create the edit button
-    edit_button = customtkinter.CTkButton(sub_frame2, text="Edit", command=open_indialogue_textbox)
-    edit_button.pack()
-
+def cleanup():
+    dir = './dynamically_gen_files'
+    for f in os.listdir(dir):
+        os.remove(os.path.join(dir, f))
 
 
 #cleanup of the dynamically gen files
@@ -402,22 +278,22 @@ canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('
 
 
 # Create the input text box
-genre_label = customtkinter.CTkLabel(frame, text='General Description of the Story', anchor='center')
+genre_label = customtkinter.CTkLabel(frame, text='Description', anchor='center')
 genre_label.pack(pady=5, fill='x')
 input_box = customtkinter.CTkTextbox(frame, height=100, width=400)
 input_box.pack()
 
-genre_label = customtkinter.CTkLabel(frame, text='Genre of the Story', anchor='center')
+genre_label = customtkinter.CTkLabel(frame, text='Genre', anchor='center')
 genre_label.pack(pady=5, fill='x')
 genre_box = customtkinter.CTkTextbox(frame, height=10, width=400)
 genre_box.pack()
 
-intro_label = customtkinter.CTkLabel(frame, text='Intro of the Story', anchor='center')
+intro_label = customtkinter.CTkLabel(frame, text='Intro', anchor='center')
 intro_label.pack(pady=5, fill='x')
 intro_box = customtkinter.CTkTextbox(frame, height=10, width=400)
 intro_box.pack()
 
-climax_label = customtkinter.CTkLabel(frame, text='Climax of the Story', anchor='center')
+climax_label = customtkinter.CTkLabel(frame, text='Climax', anchor='center')
 climax_label.pack(pady=5, fill='x')
 climax_box = customtkinter.CTkTextbox(frame, height=10, width=400)
 climax_box.pack()
@@ -436,13 +312,9 @@ process_button = customtkinter.CTkButton(frame, text='Generate a story', command
 process_button.pack(pady=10)
 
 
+# Create the generate button
 gen_button = customtkinter.CTkButton(frame, text='Generate Character profile', command=generate_character_profile)
 gen_button.pack(pady=10)
-
-
-gen_dial_button = customtkinter.CTkButton(frame, text='Generate In-Dialogue Conversation', command=generate_indialogue_conversation)
-gen_dial_button.pack(pady=10)
-
 
 # Start the GUI
 root.mainloop()
