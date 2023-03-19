@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-import customtkinter
 from PIL import ImageTk, Image
 from chatgpt_wrapper import ChatGPT
 import requests
@@ -44,7 +43,7 @@ def process_input():
         input_string = ' based on '+ input_text
         input_prompt+=input_string
     if char_list:
-        character_string = ' with ' +str(len(char_list))+ ' characters with the names ' + str(char_list) +' and their corresponding traits being '+ str(trait_list) + '(note that the character names and traits are in the form of lists, so associate each character name index only to the same trait list index for generating the story)'
+        character_string = ' with ' +str(len(char_list))+ ' characters with the names ' + str(char_list) +' and their corresponding traits being '+ str(trait_list)
         input_prompt+=character_string
     if intro_text:
         intro_string = ' that starts with '+ intro_text
@@ -79,7 +78,7 @@ def gettingfunc(character_box,trait_box,character_label,trait_label,button2):
     trait_text = trait_box.get('1.0', 'end-1c')
     trait_list.append(trait_text)
     print(trait_list)
-    button_1 = customtkinter.CTkButton(root, text ="Finish", command = lambda:[character_box.destroy(),character_label.destroy(),trait_box.destroy(),trait_label.destroy(),add_character(button_1)])
+    button_1 = tk.Button(root, text ="Finish", command = lambda:[character_box.destroy(),character_label.destroy(),trait_box.destroy(),trait_label.destroy(),add_character(button_1)])
     
     #Exteral padding for the buttons
     button_1.pack(pady = 40)
@@ -98,36 +97,34 @@ def add_character(button_1):
 
 def create_character():
     print("create character")
-    character_label = customtkinter.CTkLabel(root, text='Character Name', anchor='center')
+    character_label = ttk.Label(root, text='Character Name', anchor='center')
     character_label.pack(pady=50, fill='x')
-    character_box = customtkinter.CTkTextbox(root, height=1, width=50)
+    character_box = tk.Text(root, height=1, width=50)
     character_box.pack(padx=0,pady=10)
     
 #character_box.config(command=character_box.pack_forget) 
-    trait_label = customtkinter.CTkLabel(root, text='Character Traits', anchor='center')
+    trait_label = tk.Label(root, text='Character Traits', anchor='center')
     trait_label.pack(pady=5, fill='x')
-    trait_box = customtkinter.CTkTextbox(root, height=1, width=50)
+    trait_box = tk.Text(root, height=1, width=50)
     trait_box.pack(padx=0,pady=10)
     #trait_box.config(command=trait_box.pack_forget) 
-    button2 = customtkinter.CTkButton(root,text="Record Data",command=lambda:[gettingfunc(character_box,trait_box,character_label,trait_label,button2)])
+    button2=tk.Button(root,text="Record Data",command=lambda:[gettingfunc(character_box,trait_box,character_label,trait_label,button2)])
     button2.pack(pady = 40)
 
 
 def generate_character_profile():
     # Create the GUI
-    char_win = customtkinter.CTkToplevel(frame)
-    w, h = char_win.winfo_screenwidth(), char_win.winfo_screenheight()
-    char_win.geometry("%dx%d+0+0" % (w, h))
+    char_win = tk.Toplevel(frame)
 
     char_canvas = tk.Canvas(char_win)
     char_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-    scrollbar = customtkinter.CTkScrollbar(char_win, command=char_canvas.yview)
+    scrollbar = tk.Scrollbar(char_win, command=char_canvas.yview)
     scrollbar.pack(side=tk.LEFT, fill=tk.Y)
 
     char_canvas.configure(yscrollcommand=scrollbar.set)
 
-    sub_frame = customtkinter.CTkFrame(char_canvas, height=200)
+    sub_frame = tk.Frame(char_canvas, height=200)
     char_canvas.create_window((0, 0), window=sub_frame, anchor='nw')
 
     char_canvas.configure(scrollregion=char_canvas.bbox('all'))
@@ -174,7 +171,7 @@ def generate_character_profile():
             print("File created")
 
     # Create a frame to contain the text box and canvas
-    bb_frame = customtkinter.CTkFrame(sub_frame)
+    bb_frame = tk.Frame(sub_frame)
     bb_frame.pack()
 
     # iterate over the file paths and create a text box for each file
@@ -192,7 +189,7 @@ def generate_character_profile():
             with open(new_file_path,'wb') as f:
                 shutil.copyfileobj(res.raw, f)
             
-            char_text_box = customtkinter.CTkTextbox(bb_frame, height=10, width=50, state='disabled')
+            char_text_box = tk.Text(bb_frame, height=10, width=50, state='disabled')
             char_text_box.grid(row=i, column=0, padx=10, pady=10)
             char_text_box.configure(state='normal')
             char_text_box.delete('1.0', 'end')
@@ -245,25 +242,21 @@ def open_textbox():
 #cleanup of the dynamically gen files
 cleanup()
 
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("green")
-
 # Create the GUI
-root = customtkinter.CTk()
-root.state('zoomed')
+root = tk.Tk()
 root.title('ECS 289G - Short Story Long - Project')
 
 canvas = tk.Canvas(root)
 canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-scrollbar = customtkinter.CTkScrollbar(root)
+scrollbar = tk.Scrollbar(root)
 scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-scrollbar.configure(command=canvas.yview)
+scrollbar.config(command=canvas.yview)
 
 
 canvas.configure(yscrollcommand=scrollbar.set)
 
-frame = customtkinter.CTkFrame(canvas, height=1000)
+frame = tk.Frame(canvas, height=1000)
 canvas.create_window((0, 0), window=frame, anchor='nw')
 
 canvas.configure(scrollregion=canvas.bbox('all'))
@@ -273,50 +266,50 @@ canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('
 # Create the input text box
 genre_label = ttk.Label(frame, text='Description', anchor='center')
 genre_label.pack(pady=5, fill='x')
-input_box = customtkinter.CTkTextbox(frame, height=100, width=400)
-input_box.pack()
+input_box = tk.Text(frame, height=10, width=50)
+input_box.pack(padx=0,pady=10)
 
 genre_label = ttk.Label(frame, text='Genre', anchor='center')
 genre_label.pack(pady=5, fill='x')
-genre_box = customtkinter.CTkTextbox(frame, height=10, width=400)
-genre_box.pack()
+genre_box = tk.Text(frame, height=1, width=50)
+genre_box.pack(padx=0,pady=10)
 
 intro_label = ttk.Label(frame, text='Intro', anchor='center')
 intro_label.pack(pady=5, fill='x')
-intro_box = customtkinter.CTkTextbox(frame, height=10, width=400)
-intro_box.pack()
+intro_box = tk.Text(frame, height=1, width=50)
+intro_box.pack(padx=0,pady=10)
 
 climax_label = ttk.Label(frame, text='Climax', anchor='center')
 climax_label.pack(pady=5, fill='x')
-climax_box = customtkinter.CTkTextbox(frame, height=10, width=400)
-climax_box.pack()
+climax_box = tk.Text(frame, height=1, width=50)
+climax_box.pack(padx=0,pady=10)
 
 char_list=[]
 trait_list=[]
 
-customtkinter.CTkLabel(frame, text="Enter Number of Characters").pack()
-a = customtkinter.CTkEntry(frame, width=35)
+tk.Label(frame, text="Enter Number of Characters", font=('Calibri 10')).pack()
+a=tk.Entry(frame, width=35)
 a.pack()
-gen_button = customtkinter.CTkButton(frame, text='Enter Details', command=calc)
+gen_button = ttk.Button(frame, text='Enter Details', command=calc)
 gen_button.pack(pady=10)
 
 # Create the process button
-process_button = customtkinter.CTkButton(frame, text='Process', command=process_input)
+process_button = ttk.Button(frame, text='Process', command=process_input)
 process_button.pack(pady=10)
 
 # Create the output label and text box
-output_label = customtkinter.CTkLabel(frame, text='Output:', anchor='center')
+output_label = ttk.Label(frame, text='Output:', anchor='center')
 output_label.pack(pady=10, fill='x')
-output_box = customtkinter.CTkTextbox(frame, height=100, width=400, state='disabled')
+output_box = tk.Text(frame, height=10, width=50, state='disabled')
 output_box.pack(pady=10)
 
 # Create the edit button
-edit_button = customtkinter.CTkButton(root, text="Edit", command=open_textbox)
+edit_button = ttk.Button(root, text="Edit", command=open_textbox)
 edit_button.pack()
 
 
 # Create the generate button
-gen_button = customtkinter.CTkButton(frame, text='Generate Character profile', command=generate_character_profile)
+gen_button = ttk.Button(frame, text='Generate Character profile', command=generate_character_profile)
 gen_button.pack(pady=10)
 
 # Start the GUI
