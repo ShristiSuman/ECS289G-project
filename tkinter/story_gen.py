@@ -267,6 +267,41 @@ def generate_indialogue_conversation():
 
         return output_text
 
+    def process_input_dialogue():
+    # Get the input text from the text box
+        character_text = character_box.get('1.0', 'end-1c')
+        genre_text = genre_box.get('1.0', 'end-1c')
+        location_text = location_box.get('1.0', 'end-1c')
+        social_outcome_text = social_outcome_box.get('1.0', 'end-1c')
+        input_prompt = 'Write an in-dialogue conversation '
+        if character_text:
+            character_string = ' explicitly between '+ character_text
+            input_prompt+=character_string
+        if genre_text:
+            genre_string = ' based on '+ genre_text + ' genre '
+            input_prompt+=genre_string
+        if location_text:
+            location_string = 'located in '+ location_text
+            input_prompt+=location_string
+        if social_outcome_text:
+            social_outcome_string = ' which leads to an outcome where '+social_outcome_text
+            input_prompt+=social_outcome_string
+        
+        method = sel()
+        if method == '1':
+            with open('./dynamically_gen_files/story.txt', 'r') as file:
+                data = file.read().replace('\n', '')
+            print("Read the story")
+            temp_prompt = data + ' Use this above story and then '+ input_prompt
+        else:
+            temp_prompt = input_prompt
+
+        output_text = get_indialogue(temp_prompt)
+        output_box.configure(state='normal')
+        output_box.delete('1.0', 'end')
+        output_box.insert('end', output_text)
+        output_box.configure(state='disabled')
+
     def sel():
         selection = "You selected the option " + str(var.get())
         label.configure(text = selection)
@@ -274,7 +309,7 @@ def generate_indialogue_conversation():
         return value
 
     def open_indialogue_textbox():
-        textbox = customtkinter.CTkTextbox(sub_frame2, height=10, width=50)
+        textbox = customtkinter.CTkTextbox(sub_frame2, height=10, width=400)
         textbox.pack()
         
         def get_edit_text():
@@ -292,7 +327,7 @@ def generate_indialogue_conversation():
             # Creating and displaying the output based on new prompt
             edit_output_label = customtkinter.CTkLabel(sub_frame2, text='Edited Output:', anchor='center')
             edit_output_label.pack(pady=10, fill='x')
-            edit_output_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=50, state='disabled')
+            edit_output_box = customtkinter.CTkTextbox(sub_frame2, height=100, width=400, state='disabled')
             edit_output_box.pack(pady=10)
 
             edit_output_box.configure(state='normal')
@@ -326,22 +361,22 @@ def generate_indialogue_conversation():
     # Create the input text box
     character_label = customtkinter.CTkLabel(sub_frame2, text='Characters Involved', anchor='center')
     character_label.pack(pady=5, fill='x')
-    character_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=50)
+    character_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=400)
     character_box.pack(padx=0,pady=10)
 
     genre_label = customtkinter.CTkLabel(sub_frame2, text='Genre', anchor='center')
     genre_label.pack(pady=5, fill='x')
-    genre_box = customtkinter.CTkTextbox(sub_frame2, height=1, width=50)
+    genre_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=400)
     genre_box.pack(padx=0,pady=10)
 
     location_label = customtkinter.CTkLabel(sub_frame2, text='Location', anchor='center')
     location_label.pack(pady=5, fill='x')
-    location_box = customtkinter.CTkTextbox(sub_frame2, height=1, width=50)
+    location_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=400)
     location_box.pack(padx=0,pady=10)
 
     social_outcome_label = customtkinter.CTkLabel(sub_frame2, text='Social outcome', anchor='center')
     social_outcome_label.pack(pady=5, fill='x')
-    social_outcome_box = customtkinter.CTkTextbox(sub_frame2, height=1, width=50)
+    social_outcome_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=400)
     social_outcome_box.pack(padx=0,pady=10)
 
     # Create the radio button
@@ -354,17 +389,17 @@ def generate_indialogue_conversation():
 
     R2 = customtkinter.CTkRadioButton(sub_frame2, text="Build completely new story", variable=var, value=2, command=sel)
     R2.pack(anchor = 'center')
-    label = customtkinter.CTkLabel(sub_frame2)
+    label = customtkinter.CTkLabel(sub_frame2, text = "No option chosen")
     label.pack()
 
     # Create the process button
-    process_button = customtkinter.CTkButton(sub_frame2, text='Process', command=get_indialogue)
+    process_button = customtkinter.CTkButton(sub_frame2, text='Process', command=process_input_dialogue)
     process_button.pack(pady=10)
 
     # Create the output label and text box
     output_label = customtkinter.CTkLabel(sub_frame2, text='Output', anchor='center')
     output_label.pack(pady=10, fill='x')
-    output_box = customtkinter.CTkTextbox(sub_frame2, height=10, width=50, state='disabled')
+    output_box = customtkinter.CTkTextbox(sub_frame2, height=100, width=400, state='disabled')
     output_box.pack(pady=10)
 
     # Create the edit button
