@@ -113,14 +113,14 @@ def add_character(button_1):
 def create_character():
     print("create character")
     character_label = customtkinter.CTkLabel(root, text='Character Name', anchor='center')
-    character_label.pack(pady=50, fill='x')
-    character_box = customtkinter.CTkTextbox(root, height=1, width=50)
+    character_label.pack(pady=5, fill='x')
+    character_box = customtkinter.CTkTextbox(root, height=10, width=400)
     character_box.pack(padx=0,pady=10)
     
     #character_box.config(command=character_box.pack_forget) 
     trait_label = customtkinter.CTkLabel(root, text='Character Traits', anchor='center')
     trait_label.pack(pady=5, fill='x')
-    trait_box = customtkinter.CTkTextbox(root, height=1, width=50)
+    trait_box = customtkinter.CTkTextbox(root, height=10, width=400)
     trait_box.pack(padx=0,pady=10)
     #trait_box.config(command=trait_box.pack_forget) 
     button2 = customtkinter.CTkButton(root,text="Record Data",command=lambda:[gettingfunc(character_box,trait_box,character_label,trait_label,button2)])
@@ -160,6 +160,7 @@ def open_textbox():
 def generate_character_profile():
     # Create the GUI
     char_win = customtkinter.CTkToplevel(frame)
+    char_win.title('Character profile visualizer')
     w, h = char_win.winfo_screenwidth(), char_win.winfo_screenheight()
     char_win.geometry("%dx%d+0+0" % (w, h))
 
@@ -327,7 +328,7 @@ def generate_indialogue_conversation():
             # Creating and displaying the output based on new prompt
             edit_output_label = customtkinter.CTkLabel(sub_frame2, text='Edited Output:', anchor='center')
             edit_output_label.pack(pady=10, fill='x')
-            edit_output_box = customtkinter.CTkTextbox(sub_frame2, height=100, width=400, state='disabled')
+            edit_output_box = customtkinter.CTkTextbox(sub_frame2, height=900, width=400, state='disabled')
             edit_output_box.pack(pady=10)
 
             edit_output_box.configure(state='normal')
@@ -341,6 +342,7 @@ def generate_indialogue_conversation():
     
     # Create the GUI
     dial_win = customtkinter.CTkToplevel(frame)
+    dial_win.title('Dialogue conversation')
     w, h = dial_win.winfo_screenwidth(), dial_win.winfo_screenheight()
     dial_win.geometry("%dx%d+0+0" % (w, h))
 
@@ -399,7 +401,7 @@ def generate_indialogue_conversation():
     # Create the output label and text box
     output_label = customtkinter.CTkLabel(sub_frame2, text='Output', anchor='center')
     output_label.pack(pady=10, fill='x')
-    output_box = customtkinter.CTkTextbox(sub_frame2, height=100, width=400, state='disabled')
+    output_box = customtkinter.CTkTextbox(sub_frame2, height=900, width=400, state='disabled')
     output_box.pack(pady=10)
 
     # Create the edit button
