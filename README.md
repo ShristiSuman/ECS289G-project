@@ -1,16 +1,36 @@
 # ECS289G-project
 ECS289G: Computational Storytelling using AI term project (Winter 2023)
 
-# Foobar
+<!-- how to reproduce this project
+pip install chatgpt
+pip install requirements
 
-Foobar is a Python library for dealing with word pluralization.
+Heading
+Intro
+Images
+dalle.py
+OpenApI -->
+## Welcome!
+* [Learn about the project](#summary-header)
+* [Install the requirements](#requirements)
+* [Learn more about features](#configuration)
+* [Learn how to use it](#usage)
 
-## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+
+# Short Story Long
+
+<p id="summary-header" align="center">Short Story Long is an automated <b>story generating framework</b> with <b>Character Profile Creator </b> and <b>Social interaction dialogue generator.</b>
+
+
+## Requirements
+
+To use this repository, you need `requirements` installed. You can install it using `pip install -r requirements.txt`. Make sure that you have the last version of pip: `pip install --upgrade pip`
+
+Install the latest version of GPT model directly from github with pip:
 
 ```bash
-pip install foobar
+pip install git+https://github.com/mmabrouk/chatgpt-wrapper
 ```
 
 ## Usage
