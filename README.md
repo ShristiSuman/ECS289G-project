@@ -41,18 +41,7 @@ pip install git+https://github.com/mmabrouk/chatgpt-wrapper
 
 ## Usage
 
-```python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-```
+ DALLE-E is a very powerful tool which uses natural language descriptions of the scene to generate relevant images. A combination of character traits and generated story is supplied in case of this project to generate avatars of characters which are then embedded along with the profile of the character.
 
 ## Contributing
 
