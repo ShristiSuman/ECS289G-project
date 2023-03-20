@@ -63,9 +63,9 @@ def process_input():
 
     # Create the output label and text box
     output_label = customtkinter.CTkLabel(frame, text='Generated story', anchor='center')
-    output_label.pack(pady=5, fill='x')
+    output_label.pack(padx=5, pady=5, fill='x')
     output_box = customtkinter.CTkTextbox(frame, height=900, width=400, state='disabled')
-    output_box.pack(pady=10)
+    output_box.pack(padx=5, pady=5)
     output_box.configure(state='normal')
     output_box.delete('1.0', 'end')
     output_box.insert('end', output_text)
@@ -73,7 +73,13 @@ def process_input():
 
     # Create the edit button
     edit_button = customtkinter.CTkButton(frame, text="Edit the story", command=open_textbox)
-    edit_button.pack()
+    edit_button.pack(padx=5, pady=5)
+
+    gen_button = customtkinter.CTkButton(root, text='Generate Character profile', command=generate_character_profile)
+    gen_button.pack(pady=10)
+
+    gen_dial_button = customtkinter.CTkButton(root, text='Generate In-Dialogue Conversation', command=generate_indialogue_conversation)
+    gen_dial_button.pack(pady=10)
     
 def calc():
     global x
@@ -111,7 +117,7 @@ def add_character(button_1):
         create_character()
 
 def create_character():
-    print("create character")
+    print("Create character")
     character_label = customtkinter.CTkLabel(root, text='Character Name', anchor='center')
     character_label.pack(pady=5, fill='x')
     character_box = customtkinter.CTkTextbox(root, height=10, width=400)
@@ -154,8 +160,8 @@ def open_textbox():
         edit_output_box.configure(state='disabled')
 
     # Creating Submit button
-    ok_button = ttk.Button(frame, text="OK", command= show_output)
-    ok_button.pack()
+    ok_button = customtkinter.CTkButton(frame, text="OK", command= show_output)
+    ok_button.pack(padx=5, pady=5)
 
 def generate_character_profile():
     # Create the GUI
@@ -296,12 +302,22 @@ def generate_indialogue_conversation():
             temp_prompt = data + ' Use this above story and then '+ input_prompt
         else:
             temp_prompt = input_prompt
-
+        
+        # Create the output label and text box
         output_text = get_indialogue(temp_prompt)
+        output_label = customtkinter.CTkLabel(sub_frame2, text='Generated Dialogue', anchor='center')
+        output_label.pack(pady=10, fill='x')
+        output_box = customtkinter.CTkTextbox(sub_frame2, height=900, width=400, state='disabled')
+        output_box.pack(pady=10)
         output_box.configure(state='normal')
         output_box.delete('1.0', 'end')
         output_box.insert('end', output_text)
         output_box.configure(state='disabled')
+
+        # Create the edit button
+        edit_button = customtkinter.CTkButton(sub_frame2, text="Edit the Generated Dialogue", command=open_indialogue_textbox)
+        edit_button.pack(padx=5, pady=5)
+
 
     def sel():
         selection = "You selected the option " + str(var.get())
@@ -326,7 +342,7 @@ def generate_indialogue_conversation():
             edit_output_text = get_indialogue(edited_prompt)
 
             # Creating and displaying the output based on new prompt
-            edit_output_label = customtkinter.CTkLabel(sub_frame2, text='Edited Output:', anchor='center')
+            edit_output_label = customtkinter.CTkLabel(sub_frame2, text='Edited Dialogue', anchor='center')
             edit_output_label.pack(pady=10, fill='x')
             edit_output_box = customtkinter.CTkTextbox(sub_frame2, height=900, width=400, state='disabled')
             edit_output_box.pack(pady=10)
@@ -338,7 +354,7 @@ def generate_indialogue_conversation():
 
         # Creating Submit button
         ok_button = customtkinter.CTkButton(sub_frame2, text="OK", command= show_output)
-        ok_button.pack()
+        ok_button.pack(padx=5, pady=5)
     
     # Create the GUI
     dial_win = customtkinter.CTkToplevel(frame)
@@ -382,31 +398,21 @@ def generate_indialogue_conversation():
     social_outcome_box.pack(padx=0,pady=10)
 
     # Create the radio button
-    option_label = customtkinter.CTkLabel(sub_frame2, text='Story Generation Method', anchor='center')
+    option_label = customtkinter.CTkLabel(sub_frame2, text='Dialogue Generation Method', anchor='center')
     option_label.pack(pady=5, fill='x')
 
     var = tk.IntVar()
     R1 = customtkinter.CTkRadioButton(sub_frame2, text="Take previous generated story into consideration", variable=var, value=1, command=sel)
     R1.pack(anchor = 'center')
 
-    R2 = customtkinter.CTkRadioButton(sub_frame2, text="Build completely new story", variable=var, value=2, command=sel)
+    R2 = customtkinter.CTkRadioButton(sub_frame2, text="Build completely new", variable=var, value=2, command=sel)
     R2.pack(anchor = 'center')
     label = customtkinter.CTkLabel(sub_frame2, text = "No option chosen")
     label.pack()
 
     # Create the process button
-    process_button = customtkinter.CTkButton(sub_frame2, text='Process', command=process_input_dialogue)
+    process_button = customtkinter.CTkButton(sub_frame2, text='Generate Dialogue', command=process_input_dialogue)
     process_button.pack(pady=10)
-
-    # Create the output label and text box
-    output_label = customtkinter.CTkLabel(sub_frame2, text='Output', anchor='center')
-    output_label.pack(pady=10, fill='x')
-    output_box = customtkinter.CTkTextbox(sub_frame2, height=900, width=400, state='disabled')
-    output_box.pack(pady=10)
-
-    # Create the edit button
-    edit_button = customtkinter.CTkButton(sub_frame2, text="Edit", command=open_indialogue_textbox)
-    edit_button.pack()
 
 
 
@@ -437,25 +443,39 @@ canvas.create_window((0, 0), window=frame, anchor='nw')
 canvas.configure(scrollregion=canvas.bbox('all'))
 canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
 
+inst_file = open("./instructions.txt", "r")
+inst_text = inst_file.read()
+inst_file.close()
+inst1_label = customtkinter.CTkLabel(frame, text='Short Story Long', anchor='center', font=('Helvetica', 22, 'bold'))
+inst1_label.pack(pady=5, fill='x')
+inst2_label = customtkinter.CTkLabel(frame, text='An Automated Story Generating Framework with Character Profile Creation and Social Interaction Dialogues', anchor='center', font=('Helvetica', 18, 'italic'))
+inst2_label.pack(pady=5, fill='x')
+inst_box = customtkinter.CTkTextbox(frame, height=1000, width=500, state='disabled')
+inst_box.pack(side=tk.RIGHT, fill='both', expand=True, padx=5, pady=5)
+inst_box.configure(state='normal')
+inst_box.delete('1.0', 'end')
+inst_box.insert('end', inst_text)
+inst_box.configure(state='disabled')
+
 
 # Create the input text box
 genre_label = customtkinter.CTkLabel(frame, text='General Description of the Story', anchor='center')
-genre_label.pack(pady=5, fill='x')
+genre_label.pack(padx=5, pady=5, fill='x')
 input_box = customtkinter.CTkTextbox(frame, height=100, width=400)
 input_box.pack()
 
 genre_label = customtkinter.CTkLabel(frame, text='Genre of the Story', anchor='center')
-genre_label.pack(pady=5, fill='x')
+genre_label.pack(padx=5, pady=5, fill='x')
 genre_box = customtkinter.CTkTextbox(frame, height=10, width=400)
 genre_box.pack()
 
 intro_label = customtkinter.CTkLabel(frame, text='Intro of the Story', anchor='center')
-intro_label.pack(pady=5, fill='x')
+intro_label.pack(padx=5, pady=5, fill='x')
 intro_box = customtkinter.CTkTextbox(frame, height=10, width=400)
 intro_box.pack()
 
 climax_label = customtkinter.CTkLabel(frame, text='Climax of the Story', anchor='center')
-climax_label.pack(pady=5, fill='x')
+climax_label.pack(padx=5, pady=5, fill='x')
 climax_box = customtkinter.CTkTextbox(frame, height=10, width=400)
 climax_box.pack()
 
@@ -471,14 +491,6 @@ gen_button.pack(pady=10)
 # Create the process button
 process_button = customtkinter.CTkButton(frame, text='Generate a story', command=process_input)
 process_button.pack(pady=10)
-
-
-gen_button = customtkinter.CTkButton(frame, text='Generate Character profile', command=generate_character_profile)
-gen_button.pack(pady=10)
-
-
-gen_dial_button = customtkinter.CTkButton(frame, text='Generate In-Dialogue Conversation', command=generate_indialogue_conversation)
-gen_dial_button.pack(pady=10)
 
 
 # Start the GUI
