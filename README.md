@@ -32,8 +32,9 @@ pip install git+https://github.com/mmabrouk/chatgpt-wrapper
 <li> <strong>Dynamic Story Regeneration Editor</strong></li>
 <p> An option to edit the initial input leads to dynamic story regenration while still maintaing the crux of storyline.</p>
 <li><strong> Character Profile Creator</strong></li>
-<p> Profile creation based on </p>
+<p> Profile creation based on the generated story will display character's name, age, traits and backstory. </p>
 <li><strong> Character Visualizer</strong></li>
+<p> Character Traits along with generated story is used as an input to GAN which results in chracter visualized as an image</p>
 <li> <strong>In-Game Dialogue Generator and Editor</strong></li>
 <p> Multiple optional attributes like number of characters, genre, location and expected social outcome are accomodated to  develop an in-game dialogue scene which may be edited and regenrated based on author's liking.
 </ul>
