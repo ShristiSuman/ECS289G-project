@@ -42,6 +42,8 @@ pip install git+https://github.com/mmabrouk/chatgpt-wrapper
 ## Usage
 
  DALLE-E is a very powerful tool which uses natural language descriptions of the scene to generate relevant images. A combination of character traits and generated story is supplied in case of this project to generate avatars of characters which are then embedded along with the profile of the character.
+ 
+ Our project provides a complete integrated framework that can assist any author regardless of their thinking process in most idea generation or brainstorming processes involved for creating a game’s storyline, characters, appearances, in-game dialogues etc. This helps accommodate authors of different thinking characteristics on a single automated platform to help in story generation, character profile creation.
 
 ## Contributing
 
