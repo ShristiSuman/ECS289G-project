@@ -2,7 +2,7 @@
 ECS289G: Computational Storytelling using AI term project (Winter 2023)
 
 ## Welcome!
-* [System and Modules](#system architecture and modules)
+* [System and Modules](#systemarchitectureandmodules)
 * [Novelty](#novelty)
 * [Usage](#usage)
 * [Demo](#demo)
@@ -30,7 +30,7 @@ ECS289G: Computational Storytelling using AI term project (Winter 2023)
 <p> Multiple optional attributes like number of characters, genre, location and expected social outcome are accomodated to  develop an in-game dialogue scene which may be edited and regenrated based on author's liking.
 </ul>
 
-## Novelity
+## Novelty
  
 Our project provides a complete integrated framework that can assist any author regardless of their thinking process in most idea generation or brainstorming processes involved for creating a game’s storyline, characters, appearances, in-game dialogues etc. This helps accommodate authors of different thinking characteristics on a single automated platform to help in story generation, character profile creation.
 
