@@ -1,0 +1,5 @@
+Name: John
+Age: 32
+Traits: Pessimistic, anxious, introverted
+Backstory: John has always been a worrier and tends to see the negative in every situation. He is an introvert and often keeps to himself, which can sometimes make it difficult for him to connect with others.
+
