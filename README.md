@@ -2,10 +2,10 @@
 ECS289G: Computational Storytelling using AI term project (Winter 2023)
 
 ## Welcome!
-* [Learn about the project](#summary-header)
-* [Install the requirements](#requirements)
-* [Learn more about features](#features)
-* [Learn how to use it](#usage)
+* [System and Modules](#system architecture and modules)
+* [Novelty](#novelty)
+* [Usage](#usage)
+* [Demo](#demo)
 
 
 # Short Story Long
